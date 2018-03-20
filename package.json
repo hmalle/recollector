@@ -1,6 +1,7 @@
 {
   "name": "recollector",
   "version": "0.1.0",
+  "homepage": "https://hmalle.github.io/recollector",
   "private": true,
   "dependencies": {
     "react": "^16.2.0",
