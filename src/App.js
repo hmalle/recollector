@@ -1,49 +1,61 @@
 import React, { Component } from "react";
-import FriendCard from "./components/FriendCard";
+import ImageCard from "./components/ImageCard";
 import Wrapper from "./components/Wrapper";
-import Title from "./components/Title";
-import friends from "./friends.json";
+import Header from "./components/Header";
+import Jumbotron from "./components/Jumbotron";
+import images from "./images.json";
 import "./App.css";
 
 class App extends Component {
-  // Setting this.state.friends to the friends json array
+  // Setting this.state.images to the images json array
   state = {
-    friends: friends,
+    images: images,
+    unclicked: images,
     currentScore: 0,
     highScore:0
   };
 
   playEvent = id =>
   {
-    this.setState({currentScore:this.state.currentScore+1});
-    this.setState({highScore:this.state.highScore+1});
-  };
+    if(this.state.unclicked.find(item=>item.id===id)){
+      this.setState({unclicked: this.state.unclicked.filter(image=>image.id !==id)});
+      this.setState({currentScore: this.state.currentScore+1});
+      //update the higher score
+      if(this.state.currentScore > this.state.highScore){
+        this.setState({highScore: this.state.currentScore});
+      }
+      if(this.state.unclicked.length<1){
+        this.setState({ unclicked: images, images: images});
+      }
+    }else{
+      this.setState({currentScore: 0,unclicked:images});
+    }
+    var shuffled = this.state.images.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1]);
+    this.setState({images: shuffled});
 
-  removeFriend = id => {
-    // Filter this.state.friends for friends with an id not equal to the id being removed
-    const friends = this.state.friends.filter(friend => friend.id !== id);
-    // Set this.state.friends equal to the new friends array
-    this.setState({ friends });
   };
-
-  // Map over this.state.friends and render a FriendCard component for each friend object
+  
+  // Map over this.state.images and render a ImageCard component for each image object
   render() {
     return (
-      <Wrapper>
-        <Title>score:{this.state.currentScore} | top score:{this.state.highScore}</Title>
-        {this.state.friends.map(friend => (
-          <FriendCard
-            playEvent={this.playEvent}
-            removeFriend={this.removeFriend}
-            id={friend.id}
-            key={friend.id}
-            name={friend.name}
-            image={friend.image}
-            occupation={friend.occupation}
-            location={friend.location}
-          />
-        ))}
-      </Wrapper>
+      <div className="container-fluid">
+        <Header>
+          score:{this.state.currentScore}  
+          /topScore:{this.state.highScore}
+        </Header>
+        <Jumbotron></Jumbotron>
+        <Wrapper>
+          {this.state.images.map(image => (
+            <ImageCard
+              playEvent={this.playEvent}
+              removeImage={this.removeImage}
+              id={image.id}
+              key={image.id}
+              image={image.image}
+            />
+          ))}
+        </Wrapper>
+      </div>
     );
   }
 }
