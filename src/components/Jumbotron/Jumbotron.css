@@ -1,4 +1,8 @@
 
+.jumbotron{
+  margin-top: 50px;
+  height: 220px;
+}
 .elem{
   text-align:"center";
   color:#fff;
