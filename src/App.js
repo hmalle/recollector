@@ -20,11 +20,12 @@ class App extends Component {
     if(this.state.unclicked.find(item=>item.id===id)){
       this.setState({unclicked: this.state.unclicked.filter(image=>image.id !==id)});
       this.setState({currentScore: this.state.currentScore+1});
-      //update the higher score
-      if(this.state.currentScore > this.state.highScore){
-        this.setState({highScore: this.state.currentScore});
+      //update the higher score TODO: why is currentScore behind highScore
+      if(this.state.currentScore >= this.state.highScore){
+        this.setState({highScore: this.state.currentScore+1});
       }
       if(this.state.unclicked.length<1){
+        //refresh the list of unclicked images
         this.setState({ unclicked: images, images: images});
       }
     }else{
@@ -32,7 +33,6 @@ class App extends Component {
     }
     var shuffled = this.state.images.map((a) => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1]);
     this.setState({images: shuffled});
-
   };
   
   // Map over this.state.images and render a ImageCard component for each image object
